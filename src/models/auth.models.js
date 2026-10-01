@@ -62,7 +62,7 @@ const authSchema = new mongoose.Schema(
 
     isOldUser:{
       type: Boolean,
-      default: true,
+      default: false,
     },
 
     isActive: {
