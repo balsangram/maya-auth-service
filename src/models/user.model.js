@@ -91,6 +91,70 @@ const userSchema = new Auth.base.Schema(
       type: Boolean,
       default: true,
     },
+    foodPreference: {
+      type: String,
+      enum: ["veg", "non_veg", "eggetarian", "vegan"],
+      default: null,
+    },
+
+    maritalStatus: {
+      type: String,
+      enum: [
+        "single",
+        "married",
+        "divorced",
+        "widowed",
+        "separated",
+      ],
+      default: null,
+    },
+
+    relationshipStatus: {
+      type: String,
+      enum: [
+        "single",
+        "in_relationship",
+        "engaged",
+        "married",
+        "complicated",
+      ],
+      default: null,
+    },
+
+    drinking: {
+      type: String,
+      enum: ["never", "occasionally", "often"],
+      default: null,
+    },
+
+    smoking: {
+      type: String,
+      enum: ["never", "occasionally", "often"],
+      default: null,
+    },
+
+    religion: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
+      coordinates: {
+        type: [Number],
+        default: [0, 0],
+      },
+    },
+    map:{
+      type: String,
+      default: "",
+      trim: true,
+    }
   },
   {
     timestamps: true,

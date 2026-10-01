@@ -1,6 +1,7 @@
 import asyncHandler from "../utils/asyncHandler.js";
-import { changePasswordService, forgotPasswordService, loginUserService, logoutUserService, registerUserService, sendOtpService, verifyOtpService } from "../services/auth.service.js";
+import { changePasswordService, forgotPasswordService, loginUserService, logoutUserService, registerUserService, sendOtpService, uploadImageService, verifyOtpService } from "../services/auth.service.js";
 import { successResponse } from "../utils/response.js";
+import { updateUser } from "../repositories/auth.repository.js";
 
 export const register = asyncHandler(async (req, res) => {
   console.log(req.body,"=======")
@@ -35,6 +36,7 @@ export const login = asyncHandler(async (req, res) => {
     id: user._id,
     username: user.username,
     email: user.email,
+    isOldUser: user.isOldUser,
     role: user.role,
     accessToken: user.accessToken,
     refreshToken: user.refreshToken,
@@ -47,6 +49,30 @@ export const login = asyncHandler(async (req, res) => {
     200
   );
 });
+
+export const uploadProfile = asyncHandler(async(req, res) => {
+  const userId = req.user.id;
+  const profile = req.file;
+const user = await uploadImageService({userId , profile})
+  return successResponse(
+    res,
+    "Profile uploaded successfully",
+    null,
+    200 
+  )
+})
+
+export const addExtraDetails = asyncHandler(async( req, res) => {
+  const userId = req.user.id;
+  const userDetails = req.body;
+  const user = await updateUser({userId , userDetails})
+  return successResponse(
+    res,
+    "User details updated successfully",
+    null,
+    200 
+  )
+})
 
 export const logout = asyncHandler(async (req, res) => {
    const userId = req.user.id;

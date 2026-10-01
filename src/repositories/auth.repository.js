@@ -31,13 +31,34 @@ export const createUser = async (userData) => {
   return await User.create(userData);
 };
 
+// updateUser ==========================
+export const updateUser = async (data) => {
+  const { userId, ...updateData } = data;
+
+  if (!userId) {
+    throw ApiError.badRequest("User ID is required");
+  }
+
+  if (Object.keys(updateData).length === 0) {
+    throw ApiError.badRequest("No data provided for update");
+  }
+
+  return await Auth.findByIdAndUpdate(
+    userId,
+    { $set: updateData },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+};
 // ==========================================
 // Find User By Email
 // ==========================================
 
 export const findUserByEmail = async (email) => {
   return await Auth.findOne({ email })
-    .select("+password +refreshToken +fcmToken");
+    .select("+password +refreshToken +fcmToken +isOldUser");
 };
 
 // ==========================================
@@ -46,7 +67,7 @@ export const findUserByEmail = async (email) => {
 
 export const findAuthById = async (userId) => {
   return await Auth.findById(userId)
-    .select("+password +refreshToken +fcmToken");
+    .select("+password +refreshToken +fcmToken +isOldUser");
 };
 
 // ==========================================

@@ -10,14 +10,20 @@ import {
   verifyOtp,
   privacyPolicy,
   termsAndConditions,
+  uploadProfile,
+  addExtraDetails,
 } from "../controllers/auth.controller.js";
 import authMiddleware from "../middlewares/auth.middleware.js";
 import authorize from "../middlewares/authorize.middleware.js";
+import upload from "../middlewares/upload.middleware.js";
 
 const router = express.Router();
 
 router.post("/v1/register", register);
 router.post("/v1/login", login);
+router.post("/v2/upload-profile",authMiddleware,upload.single("profileImage") ,uploadProfile);
+router.post("/v2/update-extra-details",authMiddleware ,addExtraDetails);
+
 router.post("/v1/logout",authMiddleware,authorize("User"), logout);
 
 router.post("/v1/forgot-password", forgotPassword);

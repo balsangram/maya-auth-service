@@ -13,6 +13,9 @@ import {
   findUserOtpRepository,
   updatePasswordRepository,
   updateOtpRepository,
+  updateAuthProfile,
+  findAuthById,
+  updateUser,
 } from "../repositories/auth.repository.js";
 import { hashPassword } from "../utils/password.js";
 import { generateOtp } from "../utils/generateOtp.js";
@@ -51,6 +54,29 @@ export const loginUserService = async (loginData) => {
   const refreshToken = generateRefreshToken(user);
   await updateFcmToken(user._id, fcmToken);
   return { ...user.toObject(), accessToken, refreshToken };
+};
+
+
+export const uploadImageService = async (data) => {
+  const { userId, profile } = data;
+
+  const user = await findAuthById(userId);
+  if (!user) {
+    throw ApiError.notFound("User not found");
+  }
+
+  if (!user.isOldUser) {
+    throw ApiError.badRequest("User is an old user");
+  }
+
+  if (!profile) {
+    throw ApiError.badRequest("Profile image is required");
+  }
+
+  return await updateUser({
+    userId,
+    image: profile.path,
+  });
 };
 
 export const logoutUserService = async (userData) => {

@@ -60,6 +60,11 @@ const authSchema = new mongoose.Schema(
     // Account status
     // ==============================
 
+    isOldUser:{
+      type: Boolean,
+      default: true,
+    },
+
     isActive: {
       type: Boolean,
       default: true,
