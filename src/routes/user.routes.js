@@ -6,6 +6,7 @@ import {
   displayProfile,
   editProfile,
   getUserById,
+  getUserLocation,
   getUsersByIds,
 } from "../controllers/user.controller.js";
 import authMiddleware from "../middlewares/auth.middleware.js";
@@ -34,5 +35,5 @@ router.get("/v1/global-users", authMiddleware, authorize("User"), displayAllGlob
 // Internal service-to-service endpoints (no user JWT)
 router.get("/v1/internal/:userId", getUserById);
 router.post("/v1/internal/by-ids", getUsersByIds);
-
+router.get("/v1/internal/:userId/location", getUserLocation);
 export default router;
