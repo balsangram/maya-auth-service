@@ -146,3 +146,29 @@ export const getUsersByIds = asyncHandler(async (req, res) => {
     data: users,
   });
 });
+
+export const getUserLocation = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  const user = await getUserByIdService(userId);
+
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      message: "User not found",
+    });
+  }
+
+  const locationData = {
+    country: user.country,
+    state: user.state,
+    district: user.district,
+    pin: user.pin,
+  };
+
+  return res.status(200).json({
+    success: true,
+    message: "User location fetched successfully",
+    data: locationData,
+  });
+});

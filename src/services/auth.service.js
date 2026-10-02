@@ -65,7 +65,7 @@ export const uploadImageService = async (data) => {
     throw ApiError.notFound("User not found");
   }
 
-  if (!user.isOldUser) {
+  if (user.isOldUser) {
     throw ApiError.badRequest("User is an old user");
   }
 
