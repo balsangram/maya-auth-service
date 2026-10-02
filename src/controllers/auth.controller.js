@@ -53,7 +53,9 @@ export const login = asyncHandler(async (req, res) => {
 export const uploadProfile = asyncHandler(async(req, res) => {
   const userId = req.user.id;
   const profile = req.file;
+  console.log("uploadProfile called with user:", profile);
 const user = await uploadImageService({userId , profile})
+console.log("uploadProfile called with user:", user);
   return successResponse(
     res,
     "Profile uploaded successfully",
@@ -213,3 +215,17 @@ export const termsAndConditions = async (req, res) => {
     },
   });
 };
+
+export const generateTokens = asyncHandler(async (req, res) => {
+  const { accessToken, refreshToken } = req.tokens;
+
+  return successResponse(
+    res,
+    "Tokens generated successfully",
+    {
+      accessToken,
+      refreshToken,
+    },
+    200
+  );
+});

@@ -34,7 +34,7 @@ export const createUser = async (userData) => {
 // updateUser ==========================
 export const updateUser = async (data) => {
   const { userId, ...updateData } = data;
-
+console.log("updateUser called with:", { userId, updateData });
   if (!userId) {
     throw ApiError.badRequest("User ID is required");
   }

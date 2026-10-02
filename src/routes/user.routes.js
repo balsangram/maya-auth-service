@@ -14,11 +14,12 @@ import authorize from "../middlewares/authorize.middleware.js";
 import upload from "../middlewares/upload.middleware.js";
 import validate from "../middlewares/validate.middleware.js";
 import { editProfileValidation } from "../validations/user.validation.js";
+import refreshTokenMiddleware from "../middlewares/refreshToken.middleware.js";
 
 const router = express.Router();
 
 router.get("/v1/profile", 
-  authMiddleware, authorize("User"), 
+  authMiddleware,authorize("User"), 
   displayProfile);
 router.patch("/v1/profile",
   authMiddleware, authorize("User"),

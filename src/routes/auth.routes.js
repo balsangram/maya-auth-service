@@ -12,10 +12,12 @@ import {
   termsAndConditions,
   uploadProfile,
   addExtraDetails,
+  generateTokens,
 } from "../controllers/auth.controller.js";
 import authMiddleware from "../middlewares/auth.middleware.js";
 import authorize from "../middlewares/authorize.middleware.js";
 import upload from "../middlewares/upload.middleware.js";
+import refreshTokenMiddleware from "../middlewares/refreshToken.middleware.js";
 
 const router = express.Router();
 
@@ -31,6 +33,8 @@ router.post("/v1/change-password",authMiddleware,authorize("User"), changePasswo
 
 router.post("/v1/send-otp", sendOtp);
 router.post("/v1/verify-otp", verifyOtp);
+
+router.get("/v2/generate-token", refreshTokenMiddleware, generateTokens);
 
 // ==============================
 // Legal

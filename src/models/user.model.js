@@ -14,11 +14,7 @@ const userSchema = new Auth.base.Schema(
       trim: true,
     },
 
-    profileImage: {
-      type: String,
-      default: "",
-    },
-
+   
     profileImagePublicId: {
       type: String,
       default: "",
