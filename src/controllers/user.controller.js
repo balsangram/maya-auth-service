@@ -2,6 +2,7 @@ import { deleteUserService, displayAllGlobalUsersService, displayUserDetailsServ
 import asyncHandler from "../utils/asyncHandler.js";
 import ApiError from "../utils/ApiError.js";
 import { paginationResponse, successResponse } from "../utils/response.js";
+import { checkUserSubscriptionService } from "../services/auth.service.js";
 
 export const displayProfile = asyncHandler(async (req, res) => {
   const userId = req.user.id;
@@ -11,6 +12,9 @@ export const displayProfile = asyncHandler(async (req, res) => {
   if (!user) {
     throw new ApiError(404, "User not found");
   }
+
+   const checkSubscription = await checkUserSubscriptionService(user._id);
+  console.log("User details checkSubscription:", checkSubscription);
 console.log("User details fetched:", user);
   const userResponse = {
     id: user._id,
@@ -39,6 +43,7 @@ console.log("User details fetched:", user);
     pin: user.pin,
 
     isProfilePublic: user.isProfilePublic,
+    isSubscribed: checkSubscription,
   };
 
   return successResponse(
@@ -48,6 +53,38 @@ console.log("User details fetched:", user);
     200
   );
 });
+
+export const displayOtherUserProfile = asyncHandler(async (req, res) => {
+  const userId = req.user.id;
+  const { userId: otherUserId } = req.query;
+
+  if (!otherUserId) {
+    throw new ApiError(400, "Missing required query parameter: userId");
+  }
+
+  const user = await displayUserDetailsService(otherUserId);
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  const userResponse = {
+    id: user._id,
+    name: user.name,
+    username: user.username,
+    bio: user.bio,
+    profileImage: user.image,
+    isProfilePublic: user.isProfilePublic,
+  };
+
+  return successResponse(
+    res,
+    "Other user's profile retrieved successfully",
+    userResponse,
+    200
+  );
+});
+
 export const editProfile = asyncHandler(async (req, res) => {
   const userId = req.user.id;
 

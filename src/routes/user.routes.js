@@ -3,6 +3,7 @@ import express from "express";
 import {
   deleteUser,
   displayAllGlobalUsers,
+  displayOtherUserProfile,
   displayProfile,
   editProfile,
   getUserById,
@@ -32,6 +33,8 @@ router.delete("/v1/profile",
   deleteUser)
 
 router.get("/v1/global-users", authMiddleware, authorize("User"), displayAllGlobalUsers);
+
+router.get("/v2/visitor/profile", authMiddleware, authorize("User"), displayOtherUserProfile);
 
 // Internal service-to-service endpoints (no user JWT)
 router.get("/v1/internal/:userId", getUserById);

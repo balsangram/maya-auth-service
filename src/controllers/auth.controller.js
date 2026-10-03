@@ -1,6 +1,6 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import ApiError from "../utils/ApiError.js";
-import { changePasswordService, forgotPasswordService, loginUserService, logoutUserService, registerUserService, sendOtpService, uploadImageService, verifyOtpService } from "../services/auth.service.js";
+import { changePasswordService, checkUserSubscriptionService, forgotPasswordService, loginUserService, logoutUserService, registerUserService, sendOtpService, uploadImageService, verifyOtpService } from "../services/auth.service.js";
 import { successResponse } from "../utils/response.js";
 import { updateUser } from "../repositories/auth.repository.js";
 
@@ -33,6 +33,7 @@ export const login = asyncHandler(async (req, res) => {
   console.log(req.body,"=======")
   const { email, password ,fcmToken} = req.body;
   const user = await loginUserService({ email, password ,fcmToken});
+ 
   const userResponse = {
     id: user._id,
     username: user.username,

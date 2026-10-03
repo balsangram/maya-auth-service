@@ -1,5 +1,6 @@
 import Auth from "../models/auth.models.js";
 import Otp from "../models/otp.model.js";
+import SubscriptionModel from "../models/Subscription.model.js";
 import User from "../models/user.model.js";
 import { comparePassword } from "../utils/password.js";
 
@@ -304,3 +305,16 @@ export const updateOtpRepository = async (userId, otp) => {
 export const findUserOtpRepository = async (userId) => {
   return await Otp.findOne({ userId });
 }
+
+export const findActiveSubscriptionRepository = async (userId) => {
+  const subscription = await SubscriptionModel.findOne({
+    userId,
+    status: "active",
+    endDate: { $gt: new Date() },
+  }).populate("planId");
+  console.log("Active subscription for userId:", userId, "is:", subscription);
+  if(!subscription) {
+    return false;
+  }
+  return subscription;
+};

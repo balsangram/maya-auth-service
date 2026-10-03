@@ -16,6 +16,7 @@ import {
   updateAuthProfile,
   findAuthById,
   updateUser,
+  findActiveSubscriptionRepository,
 } from "../repositories/auth.repository.js";
 import { hashPassword } from "../utils/password.js";
 import { generateOtp } from "../utils/generateOtp.js";
@@ -54,6 +55,12 @@ export const loginUserService = async (loginData) => {
   const refreshToken = generateRefreshToken(user);
   await updateFcmToken(user._id, fcmToken);
   return { ...user.toObject(), accessToken, refreshToken };
+};
+
+export const checkUserSubscriptionService = async (userId) => {
+  console.log("Checking subscription for userId:", userId);
+  return  await findActiveSubscriptionRepository(userId);
+
 };
 
 export const uploadImageService = async (data) => {
