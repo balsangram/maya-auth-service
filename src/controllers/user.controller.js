@@ -159,11 +159,19 @@ export const getUserLocation = asyncHandler(async (req, res) => {
     });
   }
 
+  const coordinates = user.location?.coordinates;
+  const hasCoordinates =
+    Array.isArray(coordinates) &&
+    coordinates.length === 2 &&
+    !(coordinates[0] === 0 && coordinates[1] === 0);
+
   const locationData = {
     country: user.country,
     state: user.state,
     district: user.district,
     pin: user.pin,
+    latitude: hasCoordinates ? coordinates[1] : undefined,
+    longitude: hasCoordinates ? coordinates[0] : undefined,
   };
 
   return res.status(200).json({
