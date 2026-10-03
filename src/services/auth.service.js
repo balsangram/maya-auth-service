@@ -21,7 +21,6 @@ import { hashPassword } from "../utils/password.js";
 import { generateOtp } from "../utils/generateOtp.js";
 import { verificationEmailTemplate } from "../templates/verificationEmail.js";
 import { sendEmail } from "../utils/mailer.js";
-import { uploadToCloudinary } from "../utils/cloudinary.js";
 
 export const registerUserService = async (userData) => {
   const { username, email, password } = userData;
@@ -57,7 +56,6 @@ export const loginUserService = async (loginData) => {
   return { ...user.toObject(), accessToken, refreshToken };
 };
 
-
 export const uploadImageService = async (data) => {
   const { userId, profile } = data;
 
@@ -75,19 +73,13 @@ export const uploadImageService = async (data) => {
     throw ApiError.badRequest("Profile image is required");
   }
 
-  // Upload to Cloudinary
-  const uploadedImage = await uploadToCloudinary(
-    profile,
-    "user/profile"
-  );
-
-  // Save Cloudinary URL in DB
   return await updateUser({
     userId,
-    image: uploadedImage.url,
+    userDetails: {
+      image: profile,
+    },
   });
 };
-
 export const logoutUserService = async (userData) => {
   const { userId, fcmToken, refreshToken } = userData;
   const user = await logoutUserRepository(userId, fcmToken, refreshToken);

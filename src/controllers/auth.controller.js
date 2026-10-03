@@ -1,4 +1,5 @@
 import asyncHandler from "../utils/asyncHandler.js";
+import ApiError from "../utils/ApiError.js";
 import { changePasswordService, forgotPasswordService, loginUserService, logoutUserService, registerUserService, sendOtpService, uploadImageService, verifyOtpService } from "../services/auth.service.js";
 import { successResponse } from "../utils/response.js";
 import { updateUser } from "../repositories/auth.repository.js";
@@ -50,23 +51,32 @@ export const login = asyncHandler(async (req, res) => {
   );
 });
 
-export const uploadProfile = asyncHandler(async(req, res) => {
+export const uploadProfile = asyncHandler(async (req, res) => {
   const userId = req.user.id;
-  const profile = req.file;
-  console.log("uploadProfile called with user:", profile);
-const user = await uploadImageService({userId , profile})
-console.log("uploadProfile called with user:", user);
+
+  if (!req.file || !req.file.url) {
+    throw ApiError.badRequest("Profile image is required");
+  }
+
+  const profile = req.file.url;
+
+  const user = await uploadImageService({
+    userId,
+    profile,
+  });
+
   return successResponse(
     res,
     "Profile uploaded successfully",
-    null,
-    200 
-  )
-})
+    user,
+    200
+  );
+});
 
 export const addExtraDetails = asyncHandler(async( req, res) => {
   const userId = req.user.id;
   const userDetails = req.body;
+  console.log("addExtraDetails called with user:", userDetails);
   const user = await updateUser({userId , userDetails})
   return successResponse(
     res,
