@@ -33,24 +33,40 @@ export const createUser = async (userData) => {
 
 // updateUser ==========================
 export const updateUser = async (data) => {
-  const { userId, ...updateData } = data;
-console.log("updateUser called with:", { userId, updateData });
+  const { userId, userDetails } = data;
+
+  console.log("USER ID:", userId);
+  console.log("USER DETAILS:", userDetails);
+
   if (!userId) {
     throw ApiError.badRequest("User ID is required");
   }
 
-  if (Object.keys(updateData).length === 0) {
+  if (!userDetails || Object.keys(userDetails).length === 0) {
     throw ApiError.badRequest("No data provided for update");
   }
 
-  return await Auth.findByIdAndUpdate(
+  console.log("isOldUser:", userDetails.isOldUser);
+  console.log("isOldUser type:", typeof userDetails.isOldUser);
+
+  const user = await Auth.findByIdAndUpdate(
     userId,
-    { $set: updateData },
+    {
+      $set: userDetails,
+    },
     {
       new: true,
       runValidators: true,
     }
   );
+
+  if (!user) {
+    throw ApiError.notFound("User not found");
+  }
+
+  console.log("Updated isOldUser:", user.isOldUser);
+
+  return user;
 };
 // ==========================================
 // Find User By Email
