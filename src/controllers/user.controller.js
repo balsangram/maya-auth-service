@@ -11,7 +11,7 @@ export const displayProfile = asyncHandler(async (req, res) => {
   if (!user) {
     throw new ApiError(404, "User not found");
   }
-
+console.log("User details fetched:", user);
   const userResponse = {
     id: user._id,
 
@@ -21,7 +21,7 @@ export const displayProfile = asyncHandler(async (req, res) => {
     role: user.role,
 
     bio: user.bio,
-    profileImage: user.profileImage,
+    profileImage: user.image,
 
     dateOfBirth: user.dateOfBirth,
     gender: user.gender,
