@@ -4,6 +4,7 @@ import {
   findSubscriptionByUserId,
   updateSubscription,
 } from "../repositories/subscription.repository.js";
+import env from "../config/env.js";
 
 import razorpay from "../utils/razorpay.js";
 
@@ -34,7 +35,7 @@ export const subscribePlan = async (userId, planId) => {
     amount: order.amount,
     currency: order.currency,
     planId: plan._id,
-    razorpayKey: process.env.RAZORPAY_KEY_ID,
+    razorpayKey: env.RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID,
   };
 };
 
@@ -122,7 +123,7 @@ export const resubscribePlan = async (userId) => {
     currency: order.currency,
     planId: plan._id,
     subscriptionId: subscription._id,
-    razorpayKey: process.env.RAZORPAY_KEY_ID,
+    razorpayKey: env.RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID,
   };
 };
 
